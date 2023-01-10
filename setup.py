@@ -13,7 +13,7 @@ def read_requirements(filename):
 
 setup(
     name="kz_iin_validator",
-    version="0.1.0",
+    version="0.2.0",
     author="Zhymabek Roman",
     author_email="robanokssamit@yandex.ru",
     long_description=readme_description,
@@ -21,6 +21,6 @@ setup(
     include_package_data=True,
     url="https://github.com/ZhymabekRoman/kz-iin-validator",
     license="LICENSE.txt",
-    description="An awesome package that does something",
+    description="Kazakhstan IIN parser and validator",
     install_requires=read_requirements("requirements.txt")
 )

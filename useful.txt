@@ -1,0 +1,7 @@
+https://adilet.zan.kz/rus/docs/P030000565_
+
+https://github.com/valery1707/kaz-person-id
+https://github.com/gitgetgud/iin_validate
+https://github.com/DiyazY/IIN-BIN
+https://github.com/goldenalfer/iinCheck
+https://github.com/Mi7teR/inn-validate

@@ -1,15 +1,15 @@
+import datetime as dt
 import re
 from dataclasses import dataclass
-from typing import Union, Optional
 from enum import Enum, auto
+from typing import Union
 from warnings import warn
-import datetime as dt
 
 from .exceptions import IINValidateError
 
-DIGIT_STRING = re.compile('^\d+$')
-IIN_REGEX_WEAK_FAST = re.compile("^[0-9]{12}$")
-IIN_REGEX_WEAK = re.compile("^((0[48]|[2468][048]|[13579][26])0229[1-6]|000229[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|1\d|2[0-8]))[0-6])\d{5}$")
+DIGIT_STRING = re.compile(r"^\d+$")
+IIN_REGEX_WEAK_FAST = re.compile(r"^[0-9]{12}$")
+IIN_REGEX_WEAK = re.compile(r"^((0[48]|[2468][048]|[13579][26])0229[1-6]|000229[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|1\d|2[0-8]))[0-6])\d{5}$")
 
 
 def is_digit_string(input_string: str, fast: bool = True):
@@ -46,7 +46,7 @@ class ValidatedIIN(IIN):
 
 
 def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False, raise_exception: bool = True, full_error_info: bool = True):
-    # golang like exception returning logic
+    # Golang like exception returning logic
     try:
         result = _validate_iin(iin, weak_fast_check)
     except Exception as ex:
@@ -56,7 +56,7 @@ def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False, raise_exce
             exception_msg = f"During validating IIN exception was caught: {str(ex)}"
         else:
             exception_msg = "During validating IIN exception was caught"
-        return None, exception_msgg
+        return None, exception_msg
     else:
         return result, None
 
@@ -109,7 +109,7 @@ def _validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
     if month not in range(1, 13):
         raise IINValidateError("Month is not valid")
 
-    month_dict = {4: 30, 6:30, 9: 30, 11: 30, 2: 28}
+    month_dict = {4: 30, 6: 30, 9: 30, 11: 30, 2: 28}
     day_bound = month_dict.get(month, 31)
 
     if day_bound == 28 and ((year % 4 == 0 and year % 100 != 0) or year % 400 == 0):

@@ -1,1 +1,1 @@
-from .iin_validator import validate_iin, ValidatedIIN, IIN
+from .iin_validator import IIN, ValidatedIIN, _validate_iin, validate_iin

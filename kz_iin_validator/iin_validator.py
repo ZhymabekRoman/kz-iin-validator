@@ -3,20 +3,12 @@ import re
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
-from warnings import warn
 
+from .utils import is_digit_string
 from .exceptions import IINValidateError
 
-DIGIT_STRING = re.compile(r"^\d+$")
 IIN_REGEX_WEAK_FAST = re.compile(r"^[0-9]{12}$")
 IIN_REGEX_WEAK = re.compile(r"^((0[48]|[2468][048]|[13579][26])0230[1-5]|000230[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|[1-2]\d)))[0-6]\d{5}$")
-
-
-def is_digit_string(input_string: str, fast: bool = True):
-    if fast:
-        return DIGIT_STRING.match(input_string)
-    else:
-        return all(char.isdigit() for char in input_string)
 
 
 @dataclass
@@ -30,7 +22,6 @@ class BornDate:
 class IINGender(Enum):
     male = auto()
     female = auto()
-    unspecified = auto()
 
 
 @dataclass
@@ -93,13 +84,12 @@ def _validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
         else:
             gender = IINGender.female
     else:
-        warn("Unspecified gender!")
-        gender = IINGender.unspecified
+        raise IINValidateError("Can't parse gender information")
 
     centry_born_code = iin_int(6)
     centry_born_codes_list = {1: 18, 2: 18, 3: 19, 4: 19, 5: 20, 6: 20}
     centry_born = centry_born_codes_list.get(centry_born_code)
-    if not centry_born_code:
+    if centry_born is None:
         raise IINValidateError("Can't parse centry from IIN: unknown centry information")
 
     year = int(f"{centry_born}{iin[0:2]}")
@@ -119,11 +109,7 @@ def _validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
         raise IINValidateError("Invalid day")
 
     date_string = f"{year}{month}{day}"
-
-    try:
-        date_format = dt.datetime.strptime(date_string, "%Y%m%d")
-    except Exception as ex:
-        raise IINValidateError(f"Can't parse date from IIN. Error: {str(ex)}")
+    date_format = dt.datetime.strptime(date_string, "%Y%m%d")
 
     born_date = BornDate(date_format.day, date_format.month, date_format.year, date_format)
 

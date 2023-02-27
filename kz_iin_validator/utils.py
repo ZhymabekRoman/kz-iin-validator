@@ -1,10 +1,10 @@
-from typing import Union
+import re
+
+DIGIT_STRING = re.compile(r"^\d+$")
 
 
-def is_int(num: Union[int, str]) -> bool:
-    try:
-        int(num)
-    except Exception:
-        return False
+def is_digit_string(input_string: str, fast: bool = True):
+    if fast:
+        return bool(DIGIT_STRING.match(input_string))
     else:
-        return True
+        return all(char.isdigit() for char in input_string)

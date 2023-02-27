@@ -8,14 +8,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-py35:
+  test-py37:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.5
+      - name: Set up Python 3.7
         uses: actions/setup-python@v2
         with:
-          python-version: "3.5.4"
+          python-version: "3.7.1"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -26,6 +26,7 @@ jobs:
         run: |
           pytest --cov-report xml:coverage.xml --cov=kz_iin_validator -vvs tests/
       - name: Upload Coverage report
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml

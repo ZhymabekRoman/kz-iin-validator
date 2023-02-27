@@ -9,7 +9,7 @@ from .exceptions import IINValidateError
 
 DIGIT_STRING = re.compile(r"^\d+$")
 IIN_REGEX_WEAK_FAST = re.compile(r"^[0-9]{12}$")
-IIN_REGEX_WEAK = re.compile(r"^((0[48]|[2468][048]|[13579][26])0229[1-6]|000229[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|1\d|2[0-8]))[0-6])\d{5}$")
+IIN_REGEX_WEAK = re.compile(r"^((0[48]|[2468][048]|[13579][26])0230[1-5]|000230[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|[1-2]\d)))[0-6]\d{5}$")
 
 
 def is_digit_string(input_string: str, fast: bool = True):

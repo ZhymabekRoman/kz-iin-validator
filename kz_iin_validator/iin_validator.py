@@ -65,7 +65,7 @@ def _validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
     if isinstance(iin, IIN):
         iin = iin.iin
     elif not isinstance(iin, str):
-        raise TypeError(f"Parametr 'iin' must be string, not {type(iin).__name__}")
+        raise IINValidateError(f"Parametr 'iin' must be string, not {type(iin).__name__}")
 
     if weak_fast_check:
         iin_regex_fast = IIN_REGEX_WEAK_FAST.match(iin)

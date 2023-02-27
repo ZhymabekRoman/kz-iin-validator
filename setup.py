@@ -13,7 +13,7 @@ def read_requirements(filename):
 
 setup(
     name="kz_iin_validator",
-    version="0.3.0",
+    version="0.5.0",
     author="Zhymabek Roman",
     author_email="robanokssamit@yandex.ru",
     long_description=readme_description,

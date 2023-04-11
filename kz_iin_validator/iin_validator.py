@@ -16,7 +16,7 @@ class BornDate:
     day: int
     month: int
     year: int
-    _datetime: dt.datetime
+    datetime: dt.datetime
 
 
 class IINGender(Enum):

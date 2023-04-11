@@ -47,10 +47,13 @@ python3 -m pip install git+https://github.com/ZhymabekRoman/kz-iin-validator
 ## Использование:
 ### Валидация ИИН:
 ```python
-from kz_iin_validator import validate_iin
+from kz_iin_validator import safe_validate_iin, validate_iin
 
 iin = "061211600012"
-validated_iin, error = validate_iin(iin)
+# use kz_iin_validator as in Golang (preferred in production)
+validated_iin, error = safe_validate_iin(iin)
+# or directly with exceptions raising:
+# validated_iin = validate_iin(iin)
 
 print(f"ИИН: {iin}")
 

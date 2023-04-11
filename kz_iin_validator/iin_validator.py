@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
 
-from .utils import is_digit_string
 from .exceptions import IINValidateError
+from .utils import is_digit_string
 
 IIN_REGEX_WEAK_FAST = re.compile(r"^[0-9]{12}$")
 IIN_REGEX_WEAK = re.compile(r"^((0[48]|[2468][048]|[13579][26])0230[1-5]|000230[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|[1-2]\d)))[0-6]\d{5}$")
@@ -36,23 +36,19 @@ class ValidatedIIN(IIN):
     is_validated: bool = True
 
 
-def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False, raise_exception: bool = False, full_error_info: bool = True):
+def safe_validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
     # Golang like exception returning logic
     try:
-        result = _validate_iin(iin, weak_fast_check)
+        result = validate_iin(iin, weak_fast_check)
     except Exception as ex:
-        if raise_exception:
-            raise ex
-        if full_error_info:
-            exception_msg = f"During validating IIN exception was caught: {str(ex)}"
-        else:
-            exception_msg = "During validating IIN exception was caught"
+        exception_msg = f"During validating IIN exception was caught: {str(ex)}"
         return None, exception_msg
     else:
         return result, None
 
 
-def _validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
+# TODO: refactor into separate functions
+def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False) -> ValidatedIIN:
     if isinstance(iin, IIN):
         iin = iin.iin
     elif not isinstance(iin, str):
@@ -67,15 +63,17 @@ def _validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
         if iin_regex_weak is None:
             raise IINValidateError("Not correct integers range")
 
-    if len(iin) != 12:
-        raise IINValidateError("IIN must be 12 lenght")
-
     if not is_digit_string(iin):
         raise IINValidateError("IIN must contains only numbers")
 
+    if len(iin) != 12:
+        raise IINValidateError("IIN must be 12 length")
+
     # iin helper functions
-    iin_int = lambda index: int(iin[index])
-    iin_int_range = lambda x, y: int(iin[x:y])
+    def iin_int(index):
+        return int(iin[index])
+    def iin_int_range(x, y):
+        return int(iin[x:y])
 
     is_person = (iin_int(6) != 0)
     if is_person:

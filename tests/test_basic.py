@@ -1,22 +1,21 @@
-from kz_iin_validator import validate_iin, generate_iin, IINValidateError, _validate_iin
-from kz_iin_validator.utils import is_digit_string
-import pytest
 import random
+
+import pytest
+
+from kz_iin_validator import IINValidateError, generate_iin, safe_validate_iin, validate_iin
+from kz_iin_validator.utils import is_digit_string
 
 
 def test_valid_iin():
     for _ in range(20000):
         iin = generate_iin()
-        validate_iin(iin)
+        validated_iin = validate_iin(iin)
+        assert validated_iin is not None
 
     for _ in range(20000):
         iin = generate_iin()
-        iin = _validate_iin(iin)
-        validate_iin(iin)
-
-    for _ in range(20000):
-        iin = generate_iin()
-        validate_iin(iin, weak_fast_check=True)
+        validated_iin = safe_validate_iin(iin, weak_fast_check=True)
+        assert validated_iin is not None
 
 
 def test_non_valid_iin():
@@ -53,10 +52,10 @@ def test_non_valid_iin():
         with pytest.raises(IINValidateError):
             validate_iin(iin, weak_fast_check=True)
 
-        iin_result, err = validate_iin(iin, raise_exception=False, full_error_info=False)
+        iin_result, err = safe_validate_iin(iin)
         assert err is not None
 
-        iin_result, err = validate_iin(iin, raise_exception=False, full_error_info=True)
+        iin_result, err = safe_validate_iin(iin)
         assert err is not None
 
 

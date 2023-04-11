@@ -24,9 +24,9 @@ def generate_iin():
     day = random.randint(1, day_bound)
 
     # zfill
-    year_str = '{:02d}'.format(year)
-    month_str = '{:02d}'.format(month)
-    day_str = '{:02d}'.format(day)
+    year_str = f'{year:02d}'
+    month_str = f'{month:02d}'
+    day_str = f'{day:02d}'
 
     dob = f"{year_str}{month_str}{day_str}"
 

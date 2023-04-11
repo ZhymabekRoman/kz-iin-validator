@@ -6,13 +6,17 @@ name: Vermin
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+    paths:
+      - kz_iin_validator/**
+      - tests/**
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:

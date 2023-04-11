@@ -36,7 +36,7 @@ class ValidatedIIN(IIN):
     is_validated: bool = True
 
 
-def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False, raise_exception: bool = True, full_error_info: bool = True):
+def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False, raise_exception: bool = False, full_error_info: bool = True):
     # Golang like exception returning logic
     try:
         result = _validate_iin(iin, weak_fast_check)

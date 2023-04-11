@@ -1,3 +1,4 @@
+# Ported from translatepy: https://github.com/Animenosekai/translate
 # This workflow will install Python dependencies, and check the Python requirement for translatepy using vermin
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
@@ -29,4 +30,4 @@ jobs:
         python -m pip install vermin
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Python requirement checking
-      run: vermin -vvvv --versions --backport typing translatepy
+      run: vermin -vvvv --versions kz-iin-validator

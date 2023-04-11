@@ -2,10 +2,14 @@ name: Pytest
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    paths:
+      - kz_iin_validator/**
+      - tests/**
   pull_request:
-    branches: [main]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   test-py37:

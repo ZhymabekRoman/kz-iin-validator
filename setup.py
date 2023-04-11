@@ -21,7 +21,7 @@ setup(
     include_package_data=True,
     packages=find_packages(exclude=["tests", "images"]),
     url="https://github.com/ZhymabekRoman/kz-iin-validator",
-    license="LICENSE.txt",
+    license="MIT",
     description="Kazakhstan IIN parser and validator",
     install_requires=read_requirements("requirements.txt"),
 )

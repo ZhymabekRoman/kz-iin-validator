@@ -64,4 +64,7 @@ def test_utils():
     assert is_digit_string("1316456513")
     assert is_digit_string("sdfkjdsf") is False
     assert is_digit_string("656543413", fast=False)
+    with pytest.raises(ValueError):
+        assert is_digit_string("656543413", fast=True, weak_fast_check=True)
+    assert is_digit_string("656543413", fast=False, weak_fast_check=True)
     assert is_digit_string("grarthaeg", fast=False) is False

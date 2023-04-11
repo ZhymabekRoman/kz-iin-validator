@@ -1,5 +1,8 @@
 # kz-iin-validator
 
+[![MIT License](https://img.shields.io/pypi/l/kz-iin-validator.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![PyPI version](https://img.shields.io/pypi/v/kz-iin-validator.svg?style=flat-square)](https://pypi.org/project/kz-iin-validator/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/kz-iin-validator.svg?style=flat-square)](https://pypi.org/project/kz-iin-validator/)
 [![codecov](https://img.shields.io/codecov/c/github/ZhymabekRoman/kz-iin-validator?style=flat-square)](https://app.codecov.io/github/ZhymabekRoman/kz-iin-validator)
 [![tests](https://img.shields.io/github/actions/workflow/status/ZhymabekRoman/kz-iin-validator/pytest.yml?branch=main&style=flat-square)](https://github.com/ZhymabekRoman/kz-iin-validator/actions)
 
@@ -11,7 +14,7 @@
 - Zero-depency - Не требует дополнительных зависимостей
 - Базовая валидация данных ИИН, таких как дата, месяц, год
 - Генератор ИИН
-- Два варианта валидации: стандратное (по умолчанию) и дополнительно с использованием регулярных выражении (включается через аргумент `weak_fast_check=True`, не рекомендуется к использованию) 
+- Два варианта валидации: стандартное (по умолчанию) и дополнительно с использованием регулярных выражении (включается через аргумент `weak_fast_check=True`, не рекомендуется к использованию) 
 - Проверка целостности по хэш сумме ИИН. Алгоритм формирования ИИН регулируется Постановлением правительства РК "Об утверждении Программы перехода на единый номер физического (юридического) лица (индивидуальный идентификационный номер (бизнес-идентификационный номер) в целях создания Национальных реестров идентификационных номеров Республики Казахстан" от 11 июня 2003 года N 565 - [Ссылка на источник приказа](https://adilet.zan.kz/rus/docs/P030000565_)
 
 ## Требования:
@@ -22,7 +25,7 @@
 
 ## TODO:
 - Реализовать поддержку валидации БИН
-- Улучшеная документация
+- Улучшить документация
 - Static type hint using Mypy
 
 ## Схема формирования ИИН:
@@ -60,7 +63,7 @@ print(f"Месяц: {validated_iin.born_date.month}")
 print(f"Год: {validated_iin.born_date.year}")
 
 # or directly access to datetime object:
-# validated_iin.born_date._datetime
+# validated_iin.born_date.datetime
 ```
 
 ### Генератор ИИН:

@@ -1,14 +1,10 @@
 import datetime as dt
-import re
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
 
 from .exceptions import IINValidateError
 from .utils import is_digit_string
-
-IIN_REGEX_WEAK_FAST = re.compile(r"^[0-9]{12}$")
-IIN_REGEX_WEAK = re.compile(r"^((0[48]|[2468][048]|[13579][26])0230[1-5]|000230[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|[1-2]\d)))[0-6]\d{5}$")
 
 
 @dataclass
@@ -36,10 +32,12 @@ class ValidatedIIN(IIN):
     is_validated: bool = True
 
 
-def safe_validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
-    # Golang like exception returning logic
+def safe_validate_iin(iin: Union[str, IIN]):
+    """
+    Golang like function for IIN validation
+    """
     try:
-        result = validate_iin(iin, weak_fast_check)
+        result = validate_iin(iin)
     except Exception as ex:
         exception_msg = f"During validating IIN exception was caught: {str(ex)}"
         return None, exception_msg
@@ -48,20 +46,11 @@ def safe_validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False):
 
 
 # TODO: refactor into separate functions
-def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False) -> ValidatedIIN:
+def validate_iin(iin: Union[str, IIN]) -> ValidatedIIN:
     if isinstance(iin, IIN):
         iin = iin.iin
     elif not isinstance(iin, str):
         raise IINValidateError(f"Parametr 'iin' must be string, not {type(iin).__name__}")
-
-    if weak_fast_check:
-        iin_regex_fast = IIN_REGEX_WEAK_FAST.match(iin)
-        if iin_regex_fast is None:
-            raise IINValidateError("Not valid IIN!")
-
-        iin_regex_weak = IIN_REGEX_WEAK.match(iin)
-        if iin_regex_weak is None:
-            raise IINValidateError("Not correct integers range")
 
     if not is_digit_string(iin):
         raise IINValidateError("IIN must contains only numbers")
@@ -72,6 +61,7 @@ def validate_iin(iin: Union[str, IIN], weak_fast_check: bool = False) -> Validat
     # iin helper functions
     def iin_int(index):
         return int(iin[index])
+
     def iin_int_range(x, y):
         return int(iin[x:y])
 

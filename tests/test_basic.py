@@ -2,7 +2,7 @@ import random
 
 import pytest
 
-from kz_iin_validator import IINValidateError, generate_iin, safe_validate_iin, validate_iin
+from kz_iin_validator import IINValidateError, generate_iin, safe_validate_iin, validate_iin, extract_iin
 from kz_iin_validator.utils import is_digit_string
 
 
@@ -14,7 +14,7 @@ def test_valid_iin():
 
     for _ in range(20000):
         iin = generate_iin()
-        validated_iin = safe_validate_iin(iin, weak_fast_check=True)
+        validated_iin = safe_validate_iin(iin)
         assert validated_iin is not None
 
 
@@ -49,8 +49,6 @@ def test_non_valid_iin():
     for iin in non_valid_iin_list:
         with pytest.raises(IINValidateError):
             validate_iin(iin)
-        with pytest.raises(IINValidateError):
-            validate_iin(iin, weak_fast_check=True)
 
         iin_result, err = safe_validate_iin(iin)
         assert err is not None
@@ -62,8 +60,5 @@ def test_non_valid_iin():
 def test_utils():
     assert is_digit_string("1316456513")
     assert is_digit_string("sdfkjdsf") is False
-    assert is_digit_string("656543413", fast=False)
-    with pytest.raises(ValueError):
-        assert is_digit_string("656543413", fast=True, weak_fast_check=True)
-    assert is_digit_string("656543413", fast=False, weak_fast_check=True)
-    assert is_digit_string("grarthaeg", fast=False) is False
+    assert is_digit_string("656543413")
+    assert is_digit_string("grarthaeg") is False

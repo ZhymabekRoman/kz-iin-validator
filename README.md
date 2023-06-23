@@ -14,7 +14,6 @@
 - Zero-depency - Не требует дополнительных зависимостей
 - Базовая валидация данных ИИН, таких как дата, месяц, год
 - Генератор ИИН
-- Два варианта валидации: стандартное (по умолчанию) и дополнительно с использованием регулярных выражении (включается через аргумент `weak_fast_check=True`, не рекомендуется к использованию) 
 - Проверка целостности по хэш сумме ИИН. Алгоритм формирования ИИН регулируется Постановлением правительства РК "Об утверждении Программы перехода на единый номер физического (юридического) лица (индивидуальный идентификационный номер (бизнес-идентификационный номер) в целях создания Национальных реестров идентификационных номеров Республики Казахстан" от 11 июня 2003 года N 565 - [Ссылка на источник приказа](https://adilet.zan.kz/rus/docs/P030000565_)
 
 ## Требования:
@@ -75,4 +74,14 @@ from kz_iin_validator import generate_iin
 
 generated_iin = generate_iin()
 print(generated_iin) # return generated valid IIN as string
+```
+
+### Извлечь ИИН из текста:
+```python
+from kz_iin_validator import extract_iin
+
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit - 251112401047. Aliquam vel diam ac enim consequat rhoncus 700911204362!."
+
+extracted_iin_list = extract_iin(text)
+print(extracted_iin_list)
 ```

@@ -1,6 +1,13 @@
 CHANGES
 ===============
 
+kz-iin-validator 0.7.0
+-----------
+
+### Changes between 0.6.0 and 0.7.0
+ * `weak_fast_check` argument from functions `validate_iin` and `safe_validate_iin` was removed
+ * IIN extractor from text was implemented in function `extract_iin`.
+
 kz-iin-validator 0.6.0
 -----------
 

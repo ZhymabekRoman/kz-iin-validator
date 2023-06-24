@@ -1,7 +1,7 @@
 import datetime as dt
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Union, Optional
+from typing import Union, Optional, Tuple
 
 from .exceptions import IINValidateError
 from .utils import is_digit_string
@@ -32,7 +32,7 @@ class ValidatedIIN(IIN):
     is_validated: bool = True
 
 
-def safe_validate_iin(iin: Union[str, IIN]) -> tuple[Optional[ValidatedIIN], Exception]:
+def safe_validate_iin(iin: Union[str, IIN]) -> Tuple[Optional[ValidatedIIN], Exception]:
     """
     Golang-like function for Individual Identification Number (IIN) validation.
 

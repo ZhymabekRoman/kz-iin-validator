@@ -2,6 +2,13 @@ import random
 
 
 def generate_iin():
+    """
+    Generates a random Individual Identification Number (IIN).
+
+    Returns:
+        str: The randomly generated IIN.
+
+    """
     # year = random.randint(1800, 2099)
     year = random.randint(0, 99)
     month = random.randint(1, 12)

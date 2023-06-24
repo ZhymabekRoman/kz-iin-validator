@@ -1,7 +1,7 @@
 import datetime as dt
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Union
+from typing import Union, Optional
 
 from .exceptions import IINValidateError
 from .utils import is_digit_string
@@ -32,21 +32,41 @@ class ValidatedIIN(IIN):
     is_validated: bool = True
 
 
-def safe_validate_iin(iin: Union[str, IIN]):
+def safe_validate_iin(iin: Union[str, IIN]) -> tuple[Optional[ValidatedIIN], Exception]:
     """
-    Golang like function for IIN validation
+    Golang-like function for Individual Identification Number (IIN) validation.
+
+    Args:
+        iin (Union[str, IIN]): The IIN to be validated. It can be either a string or an IIN object.
+
+    Returns:
+        A tuple of `(ValidatedIIN, Exception)`. The first element is `None` if the IIN is not valid, and the second element is an exception if there was an error validating the IIN.
+
     """
     try:
         result = validate_iin(iin)
     except Exception as ex:
-        exception_msg = f"During validating IIN exception was caught: {str(ex)}"
-        return None, exception_msg
+        return None, ex
     else:
         return result, None
 
 
 # TODO: refactor into separate functions
 def validate_iin(iin: Union[str, IIN]) -> ValidatedIIN:
+    """
+    Validates an Individual Identification Number (IIN).
+
+    Args:
+        iin (Union[str, IIN]): The IIN to be validated. It can be either a string or an IIN object.
+
+    Returns:
+        ValidatedIIN: The validated IIN as a ValidatedIIN object.
+
+    Raises:
+        ValueError: If the provided IIN is invalid.
+
+    """
+
     if isinstance(iin, IIN):
         iin = iin.iin
     elif not isinstance(iin, str):

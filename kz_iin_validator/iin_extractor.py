@@ -4,5 +4,14 @@ IIN_REGEX = re.compile(r"((0[48]|[2468][048]|[13579][26])0230[1-5]|000230[34]|\d
 
 
 def extract_iin(text: str) -> list:
-    matches = IIN_REGEX.findall(text)
-    return matches
+    """
+    Extracts all instances of an Individual Identification Number (IIN) from the given text.
+
+    Args:
+        text (str): The text from which to extract the IINs.
+
+    Returns:
+        list: A list of IINs found in the text.
+
+    """
+    return [iin.group() for iin in IIN_REGEX.finditer(text)]

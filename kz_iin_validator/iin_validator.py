@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union, Optional, Tuple
 
-from .exceptions import IINValidateError
+from .exceptions import IINParseError, NonValidIINValue, NonActiveIIN, IncorrectIINChecksum
 from .utils import is_digit_string
 
 
@@ -70,13 +70,13 @@ def validate_iin(iin: Union[str, IIN]) -> ValidatedIIN:
     if isinstance(iin, IIN):
         iin = iin.iin
     elif not isinstance(iin, str):
-        raise IINValidateError(f"Parametr 'iin' must be string, not {type(iin).__name__}")
+        raise NonValidIINValue(f"Parametr 'iin' must be string, not {type(iin).__name__}")
 
     if not is_digit_string(iin):
-        raise IINValidateError("IIN must contains only numbers")
+        raise NonValidIINValue("IIN must contains only numbers")
 
     if len(iin) != 12:
-        raise IINValidateError("IIN must be 12 length")
+        raise NonValidIINValue("IIN must be 12 length")
 
     # iin helper functions
     def iin_int(index):
@@ -92,20 +92,20 @@ def validate_iin(iin: Union[str, IIN]) -> ValidatedIIN:
         else:
             gender = IINGender.female
     else:
-        raise IINValidateError("Can't parse gender information")
+        raise IINParseError("Can't parse gender information")
 
     centry_born_code = iin_int(6)
     centry_born_codes_list = {1: 18, 2: 18, 3: 19, 4: 19, 5: 20, 6: 20}
     centry_born = centry_born_codes_list.get(centry_born_code)
     if centry_born is None:
-        raise IINValidateError("Can't parse centry from IIN: unknown centry information")
+        raise IINParseError("Can't parse centry from IIN: unknown centry information")
 
     year = int(f"{centry_born}{iin[0:2]}")
     month = iin_int_range(2, 4)
     day = iin_int_range(4, 6)
 
     if month not in range(1, 13):
-        raise IINValidateError("Month is not valid")
+        raise IINParseError("Month is not valid")
 
     month_dict = {4: 30, 6: 30, 9: 30, 11: 30, 2: 28}
     day_bound = month_dict.get(month, 31)
@@ -114,10 +114,10 @@ def validate_iin(iin: Union[str, IIN]) -> ValidatedIIN:
         day_bound = 29
 
     if day not in range(1, day_bound + 1):
-        raise IINValidateError("Invalid day")
+        raise IINParseError(f"Can't parse IIN: invalid day - {day}")
 
-    date_string = f"{year}{month}{day}"
-    date_format = dt.datetime.strptime(date_string, "%Y%m%d")
+    date_string = f"{year}-{month}-{day}"
+    date_format = dt.datetime.strptime(date_string, "%Y-%m-%d")
 
     born_date = BornDate(date_format.day, date_format.month, date_format.year, date_format)
 
@@ -137,12 +137,12 @@ def validate_iin(iin: Union[str, IIN]) -> ValidatedIIN:
 
     if checksum_1_mod == 10:
         if checksum_2_mod % 11 == 10:
-            raise IINValidateError("This IIN is not active and usable!")
+            raise NonActiveIIN("This IIN is not active and usable!")
 
         if checksum_2_mod in range(0, 10):
             control_digit = checksum_2_mod
 
     if control_digit != iin_int(11):
-        raise IINValidateError("Not correct control checksum")
+        raise IncorrectIINChecksum("Not correct control checksum")
 
     return ValidatedIIN(iin=iin, is_person=is_person, gender=gender, born_date=born_date)
